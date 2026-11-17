@@ -492,3 +492,89 @@ input {
     padding-top: 4px;
   }
 }
+.play #hud {
+  padding: 11px 15px;
+  width: 226px;
+  background: linear-gradient(120deg, #0b1824ed, #16252ce0);
+  border: 1px solid #c6b27a65;
+  border-left: 3px solid #d5b679;
+  border-radius: 2px;
+  box-shadow: 0 4px 15px #0003;
+}
+.pulse,
+.meters,
+.rite-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.pulse {
+  color: #ebd699;
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.pulse strong {
+  letter-spacing: 0.5px;
+  color: #f5eee0;
+  font-size: 13px;
+}
+.region {
+  font:
+    23px Georgia,
+    serif;
+  color: #fff0ce;
+  margin: 2px 0 8px;
+}
+.meters {
+  font-size: 11px;
+  color: #c3d5d1;
+}
+.meters b {
+  font-weight: 600;
+  color: #e8e0c4;
+}
+.rite-status,
+.boss-meter {
+  border-top: 1px solid #a7b8b43d;
+  margin-top: 8px;
+  padding-top: 6px;
+  font-size: 11px;
+  color: #c9d7d5;
+}
+.rite-status b {
+  color: #eacf91;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.boss-meter {
+  color: #ffbdc8;
+}
+.boss-meter i {
+  background: #ed7796;
+}
+.hp i {
+  transition: width 0.12s linear;
+}
+@media (max-width: 690px), (max-height: 550px) {
+  .play #hud {
+    width: 190px;
+    padding: 5px 9px;
+  }
+  .region {
+    font-size: 15px;
+    margin: 0 0 3px;
+  }
+  .pulse {
+    font-size: 9px;
+  }
+  .rite-status,
+  .boss-meter {
+    margin-top: 3px;
+    padding-top: 2px;
+  }
+  .hp {
+    margin: 3px 0;
+  }
+}

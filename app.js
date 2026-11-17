@@ -25,7 +25,6 @@ const screen = $("screen"),
   hud = $("hud");
 const ctx = $("arena").getContext("2d", { alpha: false });
 const items = Object.fromEntries(ITEMS.map((item) => [item.id, item]));
-const symbols = ["✧", "➶", "☾"];
 const keys = new Set(),
   stick = { x: 0, y: 0 };
 const meta = loadMeta();
@@ -269,24 +268,48 @@ function updateHud() {
   const biome = ["Lantern Market", "Chapel of Ash", "The Last Vineyard"][
     game.biome
   ];
+  const classInfo = CLASSES.find((c) => c.id === p.classId);
+  const health = Math.max(0, Math.ceil(p.hp));
+  const boss = game.enemies.find((e) => e.kind === "boss");
   hud.innerHTML =
-    "<b>PULSE " +
+    '<div class="pulse"><span>PULSE ' +
     String(game.wave).padStart(2, "0") +
-    " / 20</b> &nbsp; " +
-    (time ? time + "s" : "Defeat the boss") +
-    " &nbsp; · &nbsp; " +
-    Math.ceil(Math.max(0, p.hp)) +
-    " HP &nbsp; &middot; &nbsp; " +
+    " / 20</span><strong>" +
+    (time ? time + "s" : "Overtime") +
+    "</strong></div>" +
+    '<div class="region">' +
     biome +
+    '</div><div class="meters"><span>' +
+    classInfo.name +
+    "</span><b>" +
+    health +
+    " / " +
+    p.maxHp +
+    " HP</b></div>" +
     '<div class="hp"><i style="width:' +
     Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100)) +
-    '%"></i></div><div class="hudline">✧ ' +
-    b.glint +
-    " Glint &nbsp; · &nbsp; Lv " +
+    '%"></i></div>' +
+    '<div class="meters"><span>Lv ' +
     b.level +
-    " &nbsp; · &nbsp; Rite " +
+    " &middot; " +
+    b.xp +
+    "/" +
+    b.nextXp +
+    " XP</span><b>" +
+    b.glint +
+    " Glint</b></div>" +
+    '<div class="rite-status">' +
+    classInfo.rite +
+    " <b>" +
     rite +
-    "</div>";
+    "</b></div>" +
+    (boss
+      ? '<div class="boss-meter">' +
+        boss.name +
+        '<div class="hp"><i style="width:' +
+        Math.max(0, (boss.hp / boss.maxHp) * 100) +
+        '%"></i></div></div>'
+      : "");
   $("cast").textContent = rite === "READY" ? "RITE" : rite;
 }
 function shop() {
@@ -380,7 +403,9 @@ function end() {
         game.level +
         '</p><p class="meta">+' +
         earned +
-        ' Silt returned to the archives.</p><div class="actions">' +
+        " Silt returned to the archives. Expedition seed " +
+        game.seed +
+        '.</p><div class="actions">' +
         btn("New expedition →", "retry", true) +
         btn("Title screen", "home") +
         "</div>",
@@ -664,7 +689,7 @@ function frame(now) {
     else if (["won", "lost"].includes(game.phase)) end();
     else if ((hudTick += dt) > 0.12) {
       updateHud();
-      audio.intensity(Math.max(0, 1 - game.timeLeft / 30));
+      audio.intensity(Math.max(0, 1 - game.timeLeft / game.duration));
       hudTick = 0;
     }
   }
